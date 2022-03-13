@@ -1,0 +1,16 @@
+# package directories
+node_modules
+.vscode
+jspm_packages
+
+# Config files
+
+*.env
+package-lock.json
+.vscode/
+.vs/
+.vs/*
+.vs/slnx.sqlite
+.build
+.dist
+dist
