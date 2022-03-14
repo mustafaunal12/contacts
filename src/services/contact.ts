@@ -9,6 +9,8 @@ import ListContactRequest from "../dto/listContactRequest";
 import ListContactResponse from "../dto/listContactResponse";
 import ContactResponse from "../dto/contactResponse";
 
+const { Op } = require("sequelize");
+
 export default class ContactService extends BaseService {
 	public async save(request: SaveContactRequest): Promise<Result<any>> {
 		if (request.phoneNumbers.length === 0) {
@@ -77,6 +79,36 @@ export default class ContactService extends BaseService {
 		const contactDtoList = contacts.map((contact: any) => new ContactResponse(contact.toJSON()));
 
 		return new SuccessResult(new ListContactResponse(contactDtoList, nextPage));
+	}
+
+	public async search(userId: number, searchKey: string): Promise<Result<ContactResponse[]>> {
+		if (!Number.isNaN(parseInt(searchKey))) {
+			console.log("number");
+		}
+
+		const contacts: any = await Contact.findAll({
+			where: {
+				userId,
+				[Op.or]: [
+					{
+						fulltext: {
+							[Op.like]: `%${searchKey}%`,
+						},
+					},
+					{
+						"$numbers.number$": {
+							[Op.like]: `%${searchKey}%`,
+						},
+					},
+				],
+			},
+			include: [{ model: Phone }],
+			order: [["name", "ASC"]],
+		});
+
+		const contactDtoList = contacts.map((contact: any) => new ContactResponse(contact.toJSON()));
+
+		return new SuccessResult({ contacts: contactDtoList });
 	}
 
 	private async saveContact(name: string, surname: string, company: string, userId: number) {

@@ -66,4 +66,15 @@ router.post("/list", async (req: Request, res: Response, next: NextFunction) => 
 	}
 });
 
+router.post("/search", async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		required("searchKey")(req.body);
+		const response = await service.search(req.body.user.id, req.body.searchKey.toLowerCase());
+		res.send(response);
+		next();
+	} catch (err) {
+		return next(err);
+	}
+});
+
 export default router;
