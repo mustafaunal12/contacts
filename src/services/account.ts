@@ -15,6 +15,6 @@ export default class AccountService extends BaseService {
 
 		await User.update({ accessToken, updatedAt: new Date() }, { where: { id: user.id } });
 
-		return new SuccessResult(accessToken);
+		return new SuccessResult({ accessToken });
 	}
 }
