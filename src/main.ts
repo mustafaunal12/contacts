@@ -6,6 +6,7 @@ import sequelize from "./data/database";
 import home from "./routes/home";
 import account from "./routes/account";
 import contact from "./routes/contact";
+import User from "./data/models/user";
 
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -31,7 +32,7 @@ app.listen(process.env.SERVER_PORT, async () => {
 	sequelize.authenticate().then(async () => {
 		console.log("Connection has been established successfully.");
 		try {
-			await sequelize.sync();
+			await sequelize.sync().then(() => User.upsert({ id: 1, userName: "mobilist", password: "123" }));
 		} catch (error) {
 			console.log("Unable to connect to the database:", error);
 		}

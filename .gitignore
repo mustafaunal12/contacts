@@ -5,7 +5,7 @@ jspm_packages
 
 # Config files
 
-*.env
+# *.env
 package-lock.json
 .vscode/
 .vs/
