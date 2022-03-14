@@ -1,12 +1,11 @@
 /* eslint-disable consistent-return */
 import { Response, NextFunction } from "express";
-
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
+import User from "../data/models/user";
 
 const publicPaths = [
 	"/",
-	"/login",
-	"/logout",
+	"/account/login",
 ];
 
 const isPublicPath = (path: string) => publicPaths.includes(path);
@@ -24,10 +23,17 @@ const authentication = async (req: any, res: Response, next: NextFunction) => {
 
 	if (token == null) return res.sendStatus(401);
 
-	jwt.verify(token, process.env.TOKEN_SECRET as string, (err: any, user: any) => {
+	jwt.verify(token, process.env.TOKEN_SECRET as string, async (err: any, user: any) => {
 		console.log(err);
 
-		if (err) return res.sendStatus(403);
+		if (err) {
+			return res.sendStatus(401);
+		}
+
+		const isExist = await User.findOne({ where: { accessToken: token } });
+		if (!isExist) {
+			return res.sendStatus(401);
+		}
 
 		body.user = user;
 

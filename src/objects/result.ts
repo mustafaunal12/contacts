@@ -11,7 +11,7 @@ export class Result<T> {
 	constructor(success: boolean, data: T, code: string = "", message: string = "") {
 		this.data = data;
 		this.code = code;
-		this.message = message;
+		this.message = message || code;
 		this.success = success;
 	}
 }
@@ -23,7 +23,7 @@ export class SuccessResult extends Result<any> {
 }
 
 export class ErrorResult extends Result<any> {
-	constructor(code: string) {
-		super(false, {}, code, code);
+	constructor(code: string, message?: string) {
+		super(false, {}, code, message);
 	}
 }

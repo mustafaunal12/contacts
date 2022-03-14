@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import {
-	Table, Column, Model, ForeignKey, BelongsTo,
+	Table, Column, Model, ForeignKey, BelongsTo, Index,
 } from "sequelize-typescript";
 import Contact from "./contact";
 
@@ -13,6 +13,7 @@ export default class Phone extends Model {
 	@BelongsTo(() => Contact)
 	contact: Contact;
 
+	@Index
 	@Column
 	number: string;
 }

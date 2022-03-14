@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import {
-	Table, Column, Model, ForeignKey, BelongsTo, HasMany,
+	Table, Column, Model, ForeignKey, BelongsTo, HasMany, Index,
 } from "sequelize-typescript";
 import User from "./user";
 import Phone from "./phone";
@@ -25,4 +25,8 @@ export default class Contact extends Model {
 
 	@HasMany(() => Phone)
 	numbers: Phone[];
+
+	@Index
+	@Column({ type: "VARCHAR(500) GENERATED ALWAYS AS (CONCAT(name, surname, company)) STORED" })
+	fulltext: string;
 }

@@ -1,18 +1,21 @@
 /* eslint-disable import/no-cycle */
 import {
-	Table, Column, Model, HasMany,
+	Table, Column, Model, HasMany, DataType, Index,
 } from "sequelize-typescript";
 import Contact from "./contact";
 
 @Table
 export default class User extends Model {
+	@Index("user_index")
 	@Column
-	name: string;
+	userName: string;
 
+	@Index("user_index")
 	@Column
 	password: string;
 
-	@Column
+	@Index
+	@Column(DataType.STRING(700))
 	accessToken: string;
 
 	@HasMany(() => Contact)

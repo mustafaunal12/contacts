@@ -1,5 +1,4 @@
 import libPhoneNumber from "google-libphonenumber";
-import * as cryptoJS from "crypto-js";
 
 const phoneUtil = libPhoneNumber.PhoneNumberUtil.getInstance();
 
@@ -16,18 +15,5 @@ export default class BaseService {
 		} catch (ex) {
 			return undefined;
 		}
-	}
-
-	protected encrypt(data: any, secret: string) {
-		return cryptoJS.AES.encrypt(JSON.stringify(data), secret).toString();
-	}
-
-	protected decrypt(data: any, secret: string) {
-		let result = "";
-		const bytes = cryptoJS.AES.decrypt(data, secret).toString(cryptoJS.enc.Utf8);
-		if (bytes) {
-			result = JSON.parse(bytes);
-		}
-		return result;
 	}
 }
